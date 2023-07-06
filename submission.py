@@ -53,9 +53,9 @@ def learnPredictor(trainExamples, testExamples, featureExtractor, numIters, eta)
                     weights[f] = weights.get(f, 0) - eta * (-y * val)
 
         # Evaluate the predictor
-        trainError = evaluatePredictor(trainExamples, lambda x: 1 if dotProduct(weights, features) >= 0 else -1)
-        testError = evaluatePredictor(testExamples, lambda x: 1 if dotProduct(weights, features) >= 0 else -1)
-        print(f"Iteration {i}: Train error {trainError}, Test error {testError}")
+        # trainError = evaluatePredictor(trainExamples, lambda x: 1 if dotProduct(weights, features) >= 0 else -1)
+        # testError = evaluatePredictor(testExamples, lambda x: 1 if dotProduct(weights, features) >= 0 else -1)
+        # print(f"Iteration {i}: Train error {trainError}, Test error {testError}")
     # END_YOUR_CODE
     return weights
 
@@ -115,8 +115,39 @@ def kmeans(examples, K, maxIters):
             final reconstruction loss)
     '''
     # BEGIN_YOUR_CODE (our solution is 25 lines of code, but don't worry if you deviate from this)
-    
-    raise Exception("Not implemented yet")
+    def distance(x, mu):
+        return sum((x.get(i, 0) - mu.get(i, 0)) ** 2 for i in set(x).union(mu))
+
+    def sum_counters(counter_list):
+        sum_counter = Counter()
+        for c in counter_list:
+            sum_counter += c
+        for key in sum_counter:
+            sum_counter[key] /= len(counter_list)
+        return sum_counter
+
+    z = [0] * len(examples)
+    centers = random.sample(examples, K)
+
+    for iter in range(maxIters):
+        for i, x in enumerate(examples):
+            dist = [distance(x, center) for center in centers]
+            z[i] = dist.index(min(dist))
+
+        centers_old = centers[:]
+        for k in range(K):
+            indexes = [i for i, x in enumerate(z) if x == k]
+            rel_examples = [examples[i] for i in indexes]
+            centers[k] = sum_counters(rel_examples)
+
+        if centers_old == centers:
+            break
+
+        loss = sum(distance(examples[i], centers[z[i]]) for i in range(len(examples)))
+        # print(f"Iteration {iter}: Train kmeans loss {loss}")
+
+    loss = sum(distance(examples[i], centers[z[i]]) for i in range(len(examples)))
+    return centers, z, loss
     # END_YOUR_CODE
 
 
@@ -135,3 +166,14 @@ def kmeans(examples, K, maxIters):
 #     # END_YOUR_CODE
 #
 # print(extract("I like tacos", 3))
+
+
+
+
+
+# K = 6
+# bestCenters = None
+# bestAssignments = None
+# bestTotalCost = None
+# examples = generateClusteringExamples(numExamples=1000, numWordsPerTopic=3, numFillerWords=1000)
+# centers, assignments, totalCost = kmeans(examples, K, maxIters=100)
