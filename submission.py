@@ -92,7 +92,11 @@ def extractCharacterFeatures(n):
     '''
     def extract(x):
         # BEGIN_YOUR_CODE (our solution is 6 lines of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        x_no_spaces = x.replace(" ", "")
+        result = collections.defaultdict(int)
+        for i in range(len(x_no_spaces) - n + 1):
+            result[x_no_spaces[i:i + n]] += 1
+        return result
         # END_YOUR_CODE
     return extract
 
@@ -111,6 +115,7 @@ def kmeans(examples, K, maxIters):
             final reconstruction loss)
     '''
     # BEGIN_YOUR_CODE (our solution is 25 lines of code, but don't worry if you deviate from this)
+    
     raise Exception("Not implemented yet")
     # END_YOUR_CODE
 
@@ -119,3 +124,14 @@ def kmeans(examples, K, maxIters):
 # testExamples = (("hello", 1), ("moon", -1))
 # featureExtractor = extractWordFeatures
 # weights = learnPredictor(trainExamples, testExamples, featureExtractor, numIters=20, eta=0.01)
+
+# def extract(x, n):
+#     # BEGIN_YOUR_CODE (our solution is 6 lines of code, but don't worry if you deviate from this)
+#     x_no_spaces = x.replace(" ", "")
+#     result = collections.defaultdict(int)
+#     for i in range(len(x_no_spaces) - n + 1):
+#         result[x_no_spaces[i:i + n]] += 1
+#     return result
+#     # END_YOUR_CODE
+#
+# print(extract("I like tacos", 3))
