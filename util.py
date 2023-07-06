@@ -51,10 +51,10 @@ def evaluatePredictor(examples, predictor):
 
 def outputWeights(weights, path):
     print("%d weights" % len(weights))
-    out = open(path, 'w')
-    for f, v in sorted(list(weights.items()), key=lambda f_v : -f_v[1]):
-        print('\t'.join([f, str(v)]), file=out)
-    out.close()
+    with open(path, 'w', encoding='utf-8') as out:
+        for f, v in sorted(list(weights.items()), key=lambda f_v : -f_v[1]):
+            print('\t'.join([f, str(v)]), file=out)
+
 
 def verbosePredict(phi, y, weights, out):
     yy = 1 if dotProduct(phi, weights) >= 0 else -1
@@ -68,7 +68,7 @@ def verbosePredict(phi, y, weights, out):
     return yy
 
 def outputErrorAnalysis(examples, featureExtractor, weights, path):
-    out = open('error-analysis', 'w')
+    out = open('error-analysis', 'w', encoding='utf-8')
     for x, y in examples:
         print('===', x, file=out)
         verbosePredict(featureExtractor(x), y, weights, out)

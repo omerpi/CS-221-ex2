@@ -22,7 +22,7 @@ def extractWordFeatures(x):
     Example: "I am what I am" --> {'I': 2, 'am': 2, 'what': 1}
     """
     # BEGIN_YOUR_CODE (our solution is 4 lines of code, but don't worry if you deviate from this)
-    raise Exception("Not implemented yet")
+    return collections.Counter(x.split())
     # END_YOUR_CODE
 
 ############################################################
@@ -43,7 +43,19 @@ def learnPredictor(trainExamples, testExamples, featureExtractor, numIters, eta)
     '''
     weights = {}  # feature => weight
     # BEGIN_YOUR_CODE (our solution is 12 lines of code, but don't worry if you deviate from this)
-    raise Exception("Not implemented yet")
+    for i in range(numIters):
+        for x, y in trainExamples:
+            # extract features from the input data
+            features = featureExtractor(x)
+            # calculate the hinge loss derivative
+            if y * dotProduct(weights, features) < 1.0:
+                for f, val in features.items():
+                    weights[f] = weights.get(f, 0) - eta * (-y * val)
+
+        # Evaluate the predictor
+        trainError = evaluatePredictor(trainExamples, lambda x: 1 if dotProduct(weights, features) >= 0 else -1)
+        testError = evaluatePredictor(testExamples, lambda x: 1 if dotProduct(weights, features) >= 0 else -1)
+        print(f"Iteration {i}: Train error {trainError}, Test error {testError}")
     # END_YOUR_CODE
     return weights
 
@@ -62,9 +74,10 @@ def generateDataset(numExamples, weights):
     # y should be 1 or -1 as classified by the weight vector.
     def generateExample():
         # BEGIN_YOUR_CODE (our solution is 2 lines of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
+        phi = {feature: random.random() for feature in random.sample(list(weights), random.randint(1, len(weights)))}
+        y = 1 if dotProduct(weights, phi) > 0 else -1
         # END_YOUR_CODE
-        return (phi, y)
+        return phi, y
     return [generateExample() for _ in range(numExamples)]
 
 ############################################################
@@ -100,3 +113,9 @@ def kmeans(examples, K, maxIters):
     # BEGIN_YOUR_CODE (our solution is 25 lines of code, but don't worry if you deviate from this)
     raise Exception("Not implemented yet")
     # END_YOUR_CODE
+
+
+# trainExamples = (("hello world", 1), ("goodnight moon", -1))
+# testExamples = (("hello", 1), ("moon", -1))
+# featureExtractor = extractWordFeatures
+# weights = learnPredictor(trainExamples, testExamples, featureExtractor, numIters=20, eta=0.01)

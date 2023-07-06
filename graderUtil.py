@@ -214,14 +214,11 @@ class Grader:
         except KeyboardInterrupt:
             raise
         except MemoryError as e:
-            signal.alarm(0)
             gc.collect()
             self.fail('Memory limit exceeded.')
         except TimeoutFunctionException as e:
-            signal.alarm(0)
             self.fail('Time limit (%s seconds) exceeded.' % part.maxSeconds)
         except Exception as e:
-            signal.alarm(0)
             self.fail('Exception thrown: %s -- %s' % (str(type(e)), str(e)))
             self.printException()
         except SystemExit as e:
